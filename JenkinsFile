@@ -1,0 +1,25 @@
+pipeline { 
+agent any
+    stages {
+        stage('Clone Git') {
+            steps {
+                echo 'Cloning repo...'
+                git 'git@github.com:RachnaKedigehalli/Jenkins-demo.git'
+            }
+        }
+        stage('Build Code') {
+            steps {
+                echo 'Building...'
+                sh "chmod u+x functions.py"
+                sh "./functions.py"
+            }
+        }
+     stage('Test Code') {
+            steps {
+                echo 'Testing...'
+                sh "chmod u+x testing.py"
+                sh "./testing.py"
+            }
+        }
+    } 
+}
