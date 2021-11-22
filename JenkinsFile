@@ -4,7 +4,7 @@ agent any
         stage('Clone Git') {
             steps {
                 echo 'Cloning repo...'
-                git 'git@github.com:RachnaKedigehalli/Jenkins-demo.git'
+                git 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
             }
         }
         stage('Build Code') {
@@ -21,5 +21,18 @@ agent any
                 sh "./testing.py"
             }
         }
-    } 
+    }
+
+    post {
+        always {
+             echo 'Sending Email..'
+            
+             emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                 subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                 to: 'rsss30102411@gmail.com'
+            
+             echo 'Email Sent.'
+         }
+    }
 }
