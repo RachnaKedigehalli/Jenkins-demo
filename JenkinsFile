@@ -3,7 +3,7 @@ agent any
     stages {
         stage('Clone Git') {
             steps {
-                echo 'Cloning repo...'
+                sh "echo 'Cloning repo...'"
                 checkout([
                     $class: 'GitSCM', 
                     branches: [[name: '*/main']], 
@@ -14,7 +14,7 @@ agent any
         }
         stage('Build Code') {
             steps {
-                echo 'Building...'
+                sh "echo 'Building...'"
                 git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x functions.py"
                 sh "./functions.py"
@@ -22,7 +22,7 @@ agent any
         }
      stage('Test Code') {
             steps {
-                echo 'Testing...'
+                sh "echo 'Testing...'"
                 git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x testing.py"
                 sh "./testing.py"
@@ -32,14 +32,16 @@ agent any
 
     post {
         always {
-             echo 'Sending Email..'
+            sh "echo 'Sending Email..'"
             
-             emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
-                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-                 subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
-                 to: 'rsss30102411@gmail.com'
+            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n 
+                Result: ${manager.build.result}\n
+                More info at: ${env.BUILD_URL}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}",
+                to: 'rsss30102411@gmail.com'
             
-             echo 'Email Sent.'
+            sh "echo 'Email Sent.'"
          }
     }
 }
