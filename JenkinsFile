@@ -4,12 +4,18 @@ agent any
         stage('Clone Git') {
             steps {
                 echo 'Cloning repo...'
-                git 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
+                checkout([
+                    $class: 'GitSCM', 
+                    branches: [[name: '*/main']], 
+                    extensions: [], 
+                    userRemoteConfigs: [[url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git']]
+                ])
             }
         }
         stage('Build Code') {
             steps {
                 echo 'Building...'
+                git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x functions.py"
                 sh "./functions.py"
             }
@@ -17,6 +23,7 @@ agent any
      stage('Test Code') {
             steps {
                 echo 'Testing...'
+                git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x testing.py"
                 sh "./testing.py"
             }
