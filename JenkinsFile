@@ -15,7 +15,7 @@ agent any
         stage('Build Code') {
             steps {
                 sh "echo 'Building...'"
-                git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
+                // git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x functions.py"
                 sh "./functions.py"
             }
@@ -23,7 +23,7 @@ agent any
      stage('Test Code') {
             steps {
                 sh "echo 'Testing...'"
-                git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
+                // git branch: 'main', url: 'https://github.com/RachnaKedigehalli/Jenkins-demo.git'
                 sh "chmod u+x testing.py"
                 sh "./testing.py"
             }
